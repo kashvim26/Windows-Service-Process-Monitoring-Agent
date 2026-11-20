@@ -2,7 +2,7 @@ services:
   - type: web
     name: sentinel-windows-monitor
     runtime: python
-    plan: starter
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /api/health
@@ -14,6 +14,6 @@ services:
       - key: API_TOKEN
         generateValue: true
       - key: DATABASE_PATH
-        value: /var/data/monitor.db
+        value: /tmp/monitor.db
       - key: ALERT_RETENTION_DAYS
         value: "30"
