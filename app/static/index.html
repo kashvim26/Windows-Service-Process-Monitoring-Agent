@@ -1,33 +1,542 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#0b1220"><title>Sentinel | Windows Monitor</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <title>Sentinel | Windows Monitor</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
-    :root{color-scheme:dark;--bg:#0b1220;--panel:#111b2c;--line:#22304a;--text:#e7edf8;--muted:#8b9bb5;--green:#50d6a1;--amber:#ffbe62;--red:#ff727e;--blue:#78a9ff}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 85% 0%,#182943 0,transparent 36%),var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}.shell{max-width:1280px;margin:auto;padding:34px 32px 64px}.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:42px}.brand{display:flex;gap:13px;align-items:center}.mark{width:40px;height:40px;border:1px solid #36527a;background:#14243b;border-radius:12px;display:grid;place-items:center;color:var(--green);font-size:20px}.brand h1{margin:0;font-size:16px;letter-spacing:.03em}.brand p{margin:3px 0 0;font:11px 'DM Mono',monospace;color:var(--muted);letter-spacing:.08em}.status{font:11px 'DM Mono',monospace;color:var(--green);border:1px solid #244f48;background:#102821;padding:8px 11px;border-radius:20px}.status:before{content:'';display:inline-block;width:6px;height:6px;background:currentColor;border-radius:50%;margin:0 8px 1px 0}.heading{display:flex;justify-content:space-between;align-items:end;margin-bottom:23px}.eyebrow{color:var(--blue);text-transform:uppercase;font:11px 'DM Mono',monospace;letter-spacing:.16em}.heading h2{font-size:30px;letter-spacing:-.04em;margin:8px 0 5px}.heading p{margin:0;color:var(--muted);font-size:13px}.refresh{color:var(--muted);font:11px 'DM Mono',monospace}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card,.panel{background:linear-gradient(145deg,#141f32,#101928);border:1px solid var(--line);border-radius:12px}.card{padding:19px 20px}.label{font:10px 'DM Mono',monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}.value{font-size:31px;font-weight:600;letter-spacing:-.04em;margin-top:13px}.hint{font-size:11px;color:var(--muted);margin-top:5px}.value.red{color:var(--red)}.value.blue{color:var(--blue)}.value.green{color:var(--green)}.section{display:grid;grid-template-columns:1.65fr 1fr;gap:14px;margin-top:17px}.panel{overflow:hidden}.panel-head{display:flex;align-items:center;justify-content:space-between;padding:17px 19px;border-bottom:1px solid var(--line)}.panel-head h3{margin:0;font-size:13px;font-weight:600}.count{font:10px 'DM Mono',monospace;color:var(--muted)}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;text-align:left;white-space:nowrap}th{font:9px 'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:#6f829e;padding:12px 18px}td{padding:13px 18px;border-top:1px solid #1d2a3e;font-size:11px;color:#c3cee0}td.mono{font:10px 'DM Mono',monospace}.badge{padding:4px 7px;border-radius:4px;font:9px 'DM Mono',monospace;text-transform:uppercase}.high{background:#3a202c;color:var(--red)}.medium{background:#382e20;color:var(--amber)}.low{background:#1b2e3c;color:var(--blue)}.empty{padding:37px 18px;text-align:center;color:var(--muted);font-size:12px}.empty strong{display:block;color:#d1dbeb;font-size:13px;margin-bottom:5px}.feed{padding:4px 18px}.event{padding:15px 0;border-bottom:1px solid #1d2a3e;display:grid;grid-template-columns:7px 1fr;gap:11px}.event:last-child{border-bottom:0}.dot{width:7px;height:7px;border-radius:50%;margin-top:5px;background:var(--amber)}.dot.high{background:var(--red)}.event-title{font-size:11px;line-height:1.45}.event-meta{font:9px 'DM Mono',monospace;color:var(--muted);margin-top:5px}.footer{display:flex;justify-content:space-between;color:#60718b;font:9px 'DM Mono',monospace;margin-top:28px;padding-top:16px;border-top:1px solid #1b2940}.toast{color:var(--muted)}@media(max-width:850px){.cards{grid-template-columns:repeat(2,1fr)}.section{grid-template-columns:1fr}.heading{align-items:start;gap:10px;flex-direction:column}}@media(max-width:520px){.shell{padding:22px 15px 40px}.cards{gap:9px}.card{padding:14px}.value{font-size:26px}.brand p{font-size:9px}.status{font-size:9px}}
+    :root {
+      color-scheme: dark;
+      --bg: #0b1220;
+      --panel: #111b2c;
+      --line: #22304a;
+      --text: #e7edf8;
+      --muted: #8b9bb5;
+      --green: #50d6a1;
+      --amber: #ffbe62;
+      --red: #ff727e;
+      --blue: #78a9ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 85% 0%, #182943 0, transparent 36%), var(--bg);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+    }
+
+    .shell {
+      max-width: 1280px;
+      margin: auto;
+      padding: 34px 32px 64px;
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 42px;
+    }
+
+    .brand {
+      display: flex;
+      gap: 13px;
+      align-items: center;
+    }
+
+    .mark {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #36527a;
+      border-radius: 12px;
+      background: #14243b;
+      color: var(--green);
+      font-size: 20px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: .03em;
+    }
+
+    .brand p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font: 11px "DM Mono", monospace;
+      letter-spacing: .08em;
+    }
+
+    .status {
+      border: 1px solid #244f48;
+      border-radius: 20px;
+      padding: 8px 11px;
+      background: #102821;
+      color: var(--green);
+      font: 11px "DM Mono", monospace;
+    }
+
+    .status:before {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      margin: 0 8px 1px 0;
+      border-radius: 50%;
+      background: currentColor;
+      content: "";
+    }
+
+    .heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      margin-bottom: 23px;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      font: 11px "DM Mono", monospace;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .heading h2 {
+      margin: 8px 0 5px;
+      font-size: 30px;
+      letter-spacing: -.04em;
+    }
+
+    .heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .refresh {
+      color: var(--muted);
+      font: 11px "DM Mono", monospace;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .card,
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: linear-gradient(145deg, #141f32, #101928);
+    }
+
+    .card {
+      padding: 19px 20px;
+    }
+
+    .label {
+      color: var(--muted);
+      font: 10px "DM Mono", monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .value {
+      margin-top: 13px;
+      font-size: 31px;
+      font-weight: 600;
+      letter-spacing: -.04em;
+    }
+
+    .hint {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .value.red {
+      color: var(--red);
+    }
+
+    .value.blue {
+      color: var(--blue);
+    }
+
+    .section {
+      display: grid;
+      grid-template-columns: 1.65fr 1fr;
+      gap: 14px;
+      margin-top: 17px;
+    }
+
+    .panel {
+      overflow: hidden;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 17px 19px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-head h3 {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .count {
+      color: var(--muted);
+      font: 10px "DM Mono", monospace;
+    }
+
+    .table-wrap {
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      padding: 12px 18px;
+      color: #6f829e;
+      font: 9px "DM Mono", monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    td {
+      padding: 13px 18px;
+      border-top: 1px solid #1d2a3e;
+      color: #c3cee0;
+      font-size: 11px;
+    }
+
+    td.mono {
+      font: 10px "DM Mono", monospace;
+    }
+
+    .empty {
+      padding: 37px 18px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .empty strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #d1dbeb;
+      font-size: 13px;
+    }
+
+    .feed {
+      padding: 4px 18px;
+    }
+
+    .event {
+      display: grid;
+      grid-template-columns: 7px 1fr;
+      gap: 11px;
+      padding: 15px 0;
+      border-bottom: 1px solid #1d2a3e;
+    }
+
+    .event:last-child {
+      border-bottom: 0;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      margin-top: 5px;
+      border-radius: 50%;
+      background: var(--amber);
+    }
+
+    .dot.high {
+      background: var(--red);
+    }
+
+    .event-title {
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .event-meta {
+      margin-top: 5px;
+      color: var(--muted);
+      font: 9px "DM Mono", monospace;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 28px;
+      padding-top: 16px;
+      border-top: 1px solid #1b2940;
+      color: #60718b;
+      font: 9px "DM Mono", monospace;
+    }
+
+    .toast {
+      color: var(--muted);
+    }
+
+    @media (max-width: 850px) {
+      .cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .section {
+        grid-template-columns: 1fr;
+      }
+
+      .heading {
+        align-items: start;
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .shell {
+        padding: 22px 15px 40px;
+      }
+
+      .cards {
+        gap: 9px;
+      }
+
+      .card {
+        padding: 14px;
+      }
+
+      .value {
+        font-size: 26px;
+      }
+
+      .brand p,
+      .status {
+        font-size: 9px;
+      }
+    }
   </style>
 </head>
-<body><main class="shell">
-  <header class="top"><div class="brand"><div class="mark">◈</div><div><h1>SENTINEL</h1><p>WINDOWS ENDPOINT MONITOR</p></div></div><div class="status" id="connection">CONNECTING</div></header>
-  <section class="heading"><div><div class="eyebrow">Security observability</div><h2>Monitoring overview</h2><p>Process lineage, service integrity, and endpoint activity.</p></div><div class="refresh" id="updated">UPDATING</div></section>
-  <section class="cards">
-    <div class="card"><div class="label">Endpoints reporting</div><div class="value blue" id="endpoints">—</div><div class="hint">Unique monitored hosts</div></div>
-    <div class="card"><div class="label">Current processes</div><div class="value" id="processes">—</div><div class="hint">Latest inventory across endpoints</div></div>
-    <div class="card"><div class="label">Detection events</div><div class="value red" id="alerts">—</div><div class="hint">Events in retention window</div></div>
-    <div class="card"><div class="label">High severity</div><div class="value" id="high">—</div><div class="hint">Requires analyst review</div></div>
-  </section>
-  <section class="section">
-    <article class="panel"><div class="panel-head"><h3>Detection activity</h3><span class="count" id="alert-count">0 EVENTS</span></div><div class="feed" id="feed"><div class="empty"><strong>Waiting for endpoint telemetry</strong>Install and run the Windows collector to populate detections.</div></div></article>
-    <article class="panel"><div class="panel-head"><h3>Endpoint inventory</h3><span class="count" id="endpoint-count">0 HOSTS</span></div><div class="table-wrap"><table><thead><tr><th>Endpoint</th><th>Processes</th><th>Services</th><th>Last seen</th></tr></thead><tbody id="hosts"><tr><td colspan="4" class="empty">No endpoint snapshots received yet.</td></tr></tbody></table></div></article>
-  </section>
-  <footer class="footer"><span>SENTINEL MONITOR · RULE BASED TRIAGE</span><span class="toast" id="message">Signals require analyst validation.</span></footer>
-</main>
-<script>
-const fmtTime=s=>s?new Date(s).toLocaleString():"—";const escapeHtml=s=>String(s??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-async function refresh(){try{const [summary,alerts,snapshots]=await Promise.all([fetch('/api/summary').then(r=>r.json()),fetch('/api/alerts?limit=50').then(r=>r.json()),fetch('/api/snapshots/latest').then(r=>r.json())]);document.getElementById('connection').textContent='API ONLINE';document.getElementById('endpoints').textContent=summary.endpoint_count;document.getElementById('processes').textContent=summary.process_count;document.getElementById('alerts').textContent=summary.alert_count;document.getElementById('high').textContent=summary.high_alert_count;document.getElementById('alert-count').textContent=`${alerts.length} EVENTS`;document.getElementById('endpoint-count').textContent=`${snapshots.length} HOSTS`;document.getElementById('updated').textContent='UPDATED '+new Date().toLocaleTimeString();
-const feed=document.getElementById('feed');feed.innerHTML=alerts.length?alerts.map(a=>`<div class="event"><span class="dot ${escapeHtml(a.severity)}"></span><div><div class="event-title">${escapeHtml(a.title)}</div><div class="event-meta">${escapeHtml(a.endpoint)} · ${escapeHtml(a.category)} · ${fmtTime(a.created_at)}</div></div></div>`).join(''):'<div class="empty"><strong>No detections recorded</strong>New findings will appear here as endpoints report.</div>';
-document.getElementById('hosts').innerHTML=snapshots.length?snapshots.map(row=>{const p=JSON.parse(row.payload);return `<tr><td>${escapeHtml(row.endpoint)}</td><td class="mono">${row.process_count}</td><td class="mono">${row.service_count}</td><td class="mono">${fmtTime(row.received_at)}</td></tr>`}).join(''):'<tr><td colspan="4" class="empty">No endpoint snapshots received yet.</td></tr>';
-}catch(e){document.getElementById('connection').textContent='API UNAVAILABLE';document.getElementById('message').textContent='Retrying connection…'}}refresh();setInterval(refresh,15000);
-</script></body></html>
+
+<body>
+  <main class="shell">
+    <header class="top">
+      <div class="brand">
+        <div class="mark">◈</div>
+        <div>
+          <h1>SENTINEL</h1>
+          <p>WINDOWS ENDPOINT MONITOR</p>
+        </div>
+      </div>
+      <div class="status" id="connection">CONNECTING</div>
+    </header>
+
+    <section class="heading">
+      <div>
+        <div class="eyebrow">Security observability</div>
+        <h2>Monitoring overview</h2>
+        <p>Process lineage, service integrity, and endpoint activity.</p>
+      </div>
+      <div class="refresh" id="updated">UPDATING</div>
+    </section>
+
+    <section class="cards">
+      <div class="card">
+        <div class="label">Endpoints reporting</div>
+        <div class="value blue" id="endpoints">—</div>
+        <div class="hint">Unique monitored hosts</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Current processes</div>
+        <div class="value" id="processes">—</div>
+        <div class="hint">Latest inventory across endpoints</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Detection events</div>
+        <div class="value red" id="alerts">—</div>
+        <div class="hint">Events in retention window</div>
+      </div>
+
+      <div class="card">
+        <div class="label">High severity</div>
+        <div class="value" id="high">—</div>
+        <div class="hint">Requires analyst review</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <article class="panel">
+        <div class="panel-head">
+          <h3>Detection activity</h3>
+          <span class="count" id="alert-count">0 EVENTS</span>
+        </div>
+        <div class="feed" id="feed">
+          <div class="empty">
+            <strong>Waiting for endpoint telemetry</strong>
+            Install and run the Windows collector to populate detections.
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <h3>Endpoint inventory</h3>
+          <span class="count" id="endpoint-count">0 HOSTS</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Endpoint</th>
+                <th>Processes</th>
+                <th>Services</th>
+                <th>Last seen</th>
+              </tr>
+            </thead>
+            <tbody id="hosts">
+              <tr>
+                <td colspan="4" class="empty">No endpoint snapshots received yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <span>SENTINEL MONITOR · RULE BASED TRIAGE</span>
+      <span class="toast" id="message">Signals require analyst validation.</span>
+    </footer>
+  </main>
+
+  <script>
+    const fmtTime = value =>
+      value ? new Date(value).toLocaleString() : "—";
+
+    const escapeHtml = value =>
+      String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[character]);
+
+    async function fetchJson(url) {
+      const response = await fetch(url, { cache: "no-store" });
+
+      if (!response.ok) {
+        throw new Error(`Request failed (${response.status}): ${url}`);
+      }
+
+      return response.json();
+    }
+
+    async function refresh() {
+      try {
+        const [summary, alerts, endpoints] = await Promise.all([
+          fetchJson("/api/summary"),
+          fetchJson("/api/alerts?limit=50"),
+          fetchJson("/api/endpoints")
+        ]);
+
+        document.getElementById("connection").textContent = "API ONLINE";
+        document.getElementById("endpoints").textContent =
+          summary.endpoint_count ?? 0;
+        document.getElementById("processes").textContent =
+          summary.process_count ?? 0;
+        document.getElementById("alerts").textContent =
+          summary.alert_count ?? 0;
+        document.getElementById("high").textContent =
+          summary.high_alert_count ?? 0;
+        document.getElementById("alert-count").textContent =
+          `${alerts.length} EVENTS`;
+        document.getElementById("endpoint-count").textContent =
+          `${endpoints.length} HOSTS`;
+        document.getElementById("updated").textContent =
+          `UPDATED ${new Date().toLocaleTimeString()}`;
+
+        const feed = document.getElementById("feed");
+
+        feed.innerHTML = alerts.length
+          ? alerts.map(alert => `
+              <div class="event">
+                <span class="dot ${escapeHtml(alert.severity)}"></span>
+                <div>
+                  <div class="event-title">${escapeHtml(alert.title)}</div>
+                  <div class="event-meta">
+                    ${escapeHtml(alert.endpoint)}
+                    · ${escapeHtml(alert.category)}
+                    · ${fmtTime(alert.created_at)}
+                  </div>
+                </div>
+              </div>
+            `).join("")
+          : `
+              <div class="empty">
+                <strong>No detections recorded</strong>
+                New findings will appear here as endpoints report.
+              </div>
+            `;
+
+        const hosts = document.getElementById("hosts");
+
+        hosts.innerHTML = endpoints.length
+          ? endpoints.map(endpoint => `
+              <tr>
+                <td>${escapeHtml(endpoint.endpoint)}</td>
+                <td class="mono">${endpoint.process_count}</td>
+                <td class="mono">${endpoint.service_count}</td>
+                <td class="mono">${fmtTime(endpoint.received_at)}</td>
+              </tr>
+            `).join("")
+          : `
+              <tr>
+                <td colspan="4" class="empty">
+                  No endpoint snapshots received yet.
+                </td>
+              </tr>
+            `;
+
+        document.getElementById("message").textContent =
+          "Signals require analyst validation.";
+      } catch (error) {
+        document.getElementById("connection").textContent = "API UNAVAILABLE";
+        document.getElementById("message").textContent =
+          "Could not load dashboard data. Retrying…";
+        console.error("Dashboard refresh failed:", error);
+      }
+    }
+
+    refresh();
+    setInterval(refresh, 15000);
+  </script>
+</body>
+</html>
