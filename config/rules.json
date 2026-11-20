@@ -1,0 +1,11 @@
+{
+  "suspicious_parent_child": [
+    {"parent": ["winword.exe", "excel.exe", "powerpnt.exe", "outlook.exe"], "child": ["cmd.exe", "powershell.exe", "pwsh.exe", "wscript.exe", "cscript.exe", "mshta.exe", "rundll32.exe"], "severity": "high", "reason": "Office application spawned a command or script host"},
+    {"parent": ["w3wp.exe", "php-cgi.exe", "httpd.exe"], "child": ["cmd.exe", "powershell.exe", "pwsh.exe", "wscript.exe"], "severity": "high", "reason": "Web server spawned a command interpreter"},
+    {"parent": ["outlook.exe", "teams.exe"], "child": ["powershell.exe", "pwsh.exe", "wscript.exe", "mshta.exe"], "severity": "medium", "reason": "Communication client spawned a script host"}
+  ],
+  "deny_process_names": [],
+  "allow_process_names": ["system", "registry", "smss.exe", "csrss.exe", "wininit.exe", "services.exe", "lsass.exe", "winlogon.exe", "explorer.exe"],
+  "writable_path_markers": ["\\appdata\\local\\temp\\", "\\windows\\temp\\", "\\users\\public\\", "\\downloads\\"],
+  "service_path_markers": ["\\appdata\\", "\\temp\\", "\\users\\public\\", "\\downloads\\"]
+}
